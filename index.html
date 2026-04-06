@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empolyee Managment System | Data Impot & Relationship</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Core Styling -->
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="EMS Elite is a premium employee management system with powerful relationship mapping, project assignment, and data control features. Built for modern organizations.">
+</head>
+<body>
+
+    <!-- Main Application UI -->
+    <div id="ems-app">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="logo">EMS ELITE</div>
+            <nav class="nav-links">
+                <ul>
+                    <li><div class="nav-item active" data-view="dashboard"><i class="ph ph-squares-four"></i><span>Dashboard</span></div></li>
+                    <li><div class="nav-item" data-view="employees"><i class="ph ph-users-three"></i><span>Employees</span></div></li>
+                    <li><div class="nav-item" data-view="leadership"><i class="ph ph-briefcase"></i><span>Manager & HR</span></div></li>
+                    <li><div class="nav-item" data-view="projects"><i class="ph ph-kanban"></i><span>Projects</span></div></li>
+                    <li><div class="nav-item" data-view="data-control"><i class="ph ph-floppy-disk"></i><span>Data Center</span></div></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="content-area">
+            <!-- Dynamic Content Injected Here -->
+            <div id="view-container">
+                <!-- Dashboard View (Default) -->
+                <section id="view-dashboard" class="view-section">
+                    <div class="header-row">
+                        <h2>System Intelligence</h2>
+                        <div class="date-badge glass-panel" style="padding: 10px 20px; font-size: 0.9rem; font-weight: 500;">April 4, 2026</div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel">
+                            <span class="stat-label">Active Workforce</span>
+                            <span class="stat-value" id="stat-total">0</span>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <span class="stat-label">Core Departments</span>
+                            <span class="stat-value" id="stat-projects">5</span>
+                        </div>
+                        <div class="stat-card glass-panel">
+                            <span class="stat-label">Total Annual Payroll</span>
+                            <span class="stat-value" id="stat-payroll" style="font-size: 1.5rem; color: var(--accent-green);">₹0</span>
+                        </div>
+                        <div class="stat-card glass-panel" style="border-color: var(--accent-cyan);">
+                            <span class="stat-label">System Health</span>
+                            <span class="stat-value" style="font-size: 1.25rem; color: var(--accent-cyan);">OPTIMAL</span>
+                        </div>
+                    </div>
+
+                    <div class="header-row" style="margin-top: 3rem;">
+                        <h3>Recent Assignments</h3>
+                    </div>
+                    <div class="glass-panel table-container">
+                        <table id="recent-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Role</th>
+                                    <th>Assigned Lead</th>
+                                    <th>Project</th>
+                                    <th>Date Added</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-list">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="view-employees" class="view-section" style="display: none;">
+                    <div class="header-row">
+                        <h2>Workforce Directory</h2>
+                        <button class="btn-primary" style="width: auto; padding: 10px 20px;" onclick="openModal('employee')">
+                            <i class="ph ph-plus" style="margin-right: 8px;"></i>Add Employee
+                        </button>
+                    </div>
+
+                    <!-- Professional Search & Filter -->
+                    <div class="filter-bar">
+                        <div class="search-wrapper">
+                            <i class="ph ph-magnifying-glass"></i>
+                            <input type="text" id="employee-search" placeholder="Search by name, ID, or designation..." onkeyup="app.filterWorkforce()">
+                        </div>
+                        <select class="filter-select" id="status-filter" onchange="app.filterWorkforce()">
+                            <option value="all">All Status</option>
+                            <option value="Active">Active</option>
+                            <option value="On Leave">On Leave</option>
+                            <option value="Terminated">Terminated</option>
+                        </select>
+                         <select class="filter-select" id="dept-filter" onchange="app.filterWorkforce()">
+                            <option value="all">All Departments</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Operations">Operations</option>
+                        </select>
+                    </div>
+
+                    <div class="glass-panel table-container">
+                        <table id="employee-table">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Designation</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Salary</th>
+                                    <th>Reports To</th>
+                                    <th>HR Lead</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employee-list"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="view-leadership" class="view-section" style="display: none;">
+                    <div class="header-row">
+                        <h2>Leadership Core</h2>
+                        <button class="btn-primary" style="width: auto; padding: 10px 20px;" onclick="openModal('leadership')">
+                            <i class="ph ph-plus" style="margin-right: 8px;"></i>Add HR/Manager
+                        </button>
+                    </div>
+                    <div class="glass-panel table-container">
+                        <table id="leadership-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Leader Name</th>
+                                    <th>Main Department</th>
+                                    <th>Role Type</th>
+                                    <th>Email</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leadership-list"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="view-projects" class="view-section" style="display: none;">
+                    <div class="header-row">
+                        <h2>Project Pipelines</h2>
+                        <button class="btn-primary" style="width: auto; padding: 10px 20px;" onclick="openModal('project')">
+                            <i class="ph ph-plus" style="margin-right: 8px;"></i>Initiate Project
+                        </button>
+                    </div>
+                    <div class="glass-panel table-container">
+                        <table id="project-table">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Project Title</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Project Lead</th>
+                                    <th>Team</th>
+                                    <th>Budget</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="project-list"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="view-data-control" class="view-section" style="display: none;">
+                    <div class="header-row">
+                        <h2>Data Command Center</h2>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card glass-panel" style="cursor: pointer; transition: 0.3s;" onclick="exportData()">
+                            <i class="ph ph-export" style="font-size: 2.5rem; color: var(--accent-cyan);"></i>
+                            <span class="stat-label" style="font-size: 1rem; margin-top: 10px;">Export System State</span>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);">Download entire workforce data as JSON</p>
+                        </div>
+                        <div class="stat-card glass-panel" style="position: relative;">
+                            <i class="ph ph-import" style="font-size: 2.5rem; color: var(--accent-purple);"></i>
+                            <span class="stat-label" style="font-size: 1rem; margin-top: 10px;">Advanced Data Import</span>
+                            <p style="font-size: 0.75rem; color: var(--text-muted);">Upload & validate with relationship mapping</p>
+                            <input type="file" id="import-input" style="position: absolute; inset: 0; opacity: 0; cursor: pointer;">
+                        </div>
+                    </div>
+
+                    <!-- Import Configuration & Preview Panel -->
+                    <div id="import-panel" style="display: none; margin-top: 2rem;">
+                        <div class="glass-panel" style="padding: 2rem;">
+                            <h3 style="margin-bottom: 1rem;">📊 Import Configuration & Preview</h3>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div class="import-config-item">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="validate-relationships" checked>
+                                        <span style="font-weight: 600;">Validate Manager/HR References</span>
+                                    </label>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Check if all employee manager/HR assignments exist</p>
+                                </div>
+                                <div class="import-config-item">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="validate-projects" checked>
+                                        <span style="font-weight: 600;">Validate Project Assignments</span>
+                                    </label>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Verify project managers and team assignments</p>
+                                </div>
+                                <div class="import-config-item">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="auto-fix-missing">
+                                        <span style="font-weight: 600;">Auto-Assign Missing References</span>
+                                    </label>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Automatically map to available leads when possible</p>
+                                </div>
+                                <div class="import-config-item">
+                                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                        <input type="checkbox" id="merge-data" checked>
+                                        <span style="font-weight: 600;">Merge with Existing Data</span>
+                                    </label>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Keep current records; add new ones (or replace all)</p>
+                                </div>
+                            </div>
+
+                            <!-- Import Status & Report -->
+                            <div id="import-report" style="display: none; margin-top: 1.5rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid var(--glass-border);">
+                                <h4 style="margin-bottom: 1rem; color: var(--accent-cyan);">📋 Import Validation Report</h4>
+                                <div id="report-content" style="font-size: 0.9rem; line-height: 1.6;"></div>
+                                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                                    <button class="btn-primary" style="flex: 1;" onclick="app.confirmImport()">
+                                        <i class="ph ph-check" style="margin-right: 8px;"></i>Confirm & Apply Import
+                                    </button>
+                                    <button class="btn-primary" style="flex: 1; background: rgba(255,68,68,0.3); border: 1px solid #ff4444;" onclick="app.cancelImport()">
+                                        <i class="ph ph-x" style="margin-right: 8px;"></i>Cancel Import
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-container" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <button class="modal-close" onclick="closeModal()"><i class="ph ph-x"></i></button>
+            <h2 id="modal-title" style="margin-bottom: 2rem;">Modal Title</h2>
+            <form id="generic-form">
+                <div id="form-body"></div>
+                <button type="submit" class="btn-primary" style="margin-top: 1rem;">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
